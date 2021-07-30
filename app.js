@@ -2,53 +2,54 @@
 function playRound(playerSelection, computerSelection) {
     // Runs a single round of the game, playerSelection is case-insensitive
 
-
     // Nested "switch..." statements were used as I believe they would be a lot more logical to read
     // There might be a better / more optimized solution
-    let message = ""
+    let decision = ""
+
     switch(playerSelection.toLowerCase()) {
         case "rock":
             switch(computerSelection){
                 case "rock":
-                    message = "Tie! No one wins"
+                    decision = "Tie"
                     break;
                 case "paper":
-                    message = "You Lose! Paper beats Rock"
+                    decision = "Lose"
                     break;
                 case "scissors":
-                    message = "You Win! Rock beats Scissors"
+                    decision = "Win"
                     break;
             }
             break;
         case "paper":
             switch(computerSelection){
                 case "rock":
-                    message = "You Win! Paper beats Rock"
+                    decision = "Win"
                     break;
                 case "paper":
-                    message = "Tie! No one wins"
+                    decision = "Tie"
                     break;
                 case "scissors":
-                    message = "You Lose! Scissors beats Paper"
+                    decision = "Lose"
                     break;
             }
             break;
         case "scissors":
             switch(computerSelection){
                 case "rock":
-                    message = "You Lose! Rock beats Scissors"
+                    decision = "Lose"
                     break;
                 case "paper":
-                    message = "You Win! Scissors beats Paper"
+                    decision = "Win"
                     break;
                 case "scissors":
-                    message = "Tie! No one wins"
+                    decision = "Tie"
                     break;
             }
             break;
     }
-    return message
+    return decision;
 }
+
 
 function computerPlay() {
     // Will randomly return either 'rock', 'paper', or 'scissors'
@@ -68,6 +69,55 @@ function computerPlay() {
     return selected;
 }
 
-const playerSelection = prompt();
-const computerSelection = computerPlay();
-console.log(playRound(playerSelection, computerSelection))
+function createMessage(playerSelection, computerSelection, decision){
+    message = ""
+    switch(decision) {
+        case "Win":
+            message = `You Win! ${playerSelection} beats ${computerSelection}`
+            break;
+        case "Tie":
+            message = "It's a tie! No one wins"
+            break;
+        case "Lose":
+            message = `You Lose! ${computerSelection} beats ${playerSelection}`
+            break;
+    }
+    return message;
+}
+
+function tallyWinsLosses(wins, losses){
+    message = ""
+    if (wins > losses) {
+        message = `You won the Game! Score: ${wins} - ${losses}; with ${5 -(wins + losses)} Ties`
+    } else if (wins < losses) {
+        message = `You lost the Game! Score: ${wins} - ${losses}; with ${5 -(wins + losses)} Ties`
+    } else {
+        message = `You tied the Game! Score: ${wins} - ${losses}; with ${5 -(wins + losses)} Ties`
+    }
+    return message;
+}
+
+
+function game() {
+    let wins = 0
+    let losses = 0
+
+    for(let round = 0; round < 5; round++){
+        let playerSelection = prompt();
+        let computerSelection = computerPlay();
+        decision = playRound(playerSelection, computerSelection)
+        console.log(createMessage(playerSelection, computerSelection, decision))
+
+        switch(decision){
+            case "Win":
+                wins++;
+                break;
+            case "Lose":
+                losses++;
+                break;
+        }
+    }
+    alert(tallyWinsLosses(wins, losses))
+}
+
+game()
