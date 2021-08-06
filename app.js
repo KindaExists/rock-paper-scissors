@@ -69,6 +69,7 @@ function computerPlay() {
     return selected;
 }
 
+
 function createMessage(playerSelection, computerSelection, decision){
     message = ""
     switch(decision) {
@@ -85,23 +86,68 @@ function createMessage(playerSelection, computerSelection, decision){
     return message;
 }
 
-function tallyWinsLosses(wins, losses){
-    message = ""
-    if (wins > losses) {
-        message = `You won the Game! Score: ${wins} - ${losses}; with ${5 -(wins + losses)} Ties`
-    } else if (wins < losses) {
-        message = `You lost the Game! Score: ${wins} - ${losses}; with ${5 -(wins + losses)} Ties`
-    } else {
-        message = `You tied the Game! Score: ${wins} - ${losses}; with ${5 -(wins + losses)} Ties`
-    }
-    return message;
+
+function disableButtons(){
+    btns.forEach(btn => {
+        btn.disabled = true;
+    });
+
+    const body = document.querySelector('body');
+    const resetBtn = document.createElement('button');
+    resetBtn.textContent = 'Reset';
+    resetBtn.addEventListener('click', (e)=>resetGame(e, resetBtn, body));
+    body.appendChild(resetBtn);
 }
 
-const resultsDisplay = document.querySelector('#display')
+
+function resetGame(e, resetBtn, body){
+    wins = 0;
+    losses = 0;
+    btns.forEach(btn => {
+        btn.disabled = false;
+    });
+
+    resultsDisplay.textContent = '';
+    tallyDisplay.textContent = '';
+    winnerDisplay.textContent = '';
+
+    body.removeChild(resetBtn);
+}
+
+
+let wins = 0;
+let losses = 0;
+
+const resultsDisplay = document.querySelector('#results')
+const tallyDisplay = document.querySelector('#tally')
+const winnerDisplay = document.querySelector('#winner')
 const btns = document.querySelectorAll('.selection');
+
 btns.forEach(btn => btn.addEventListener('click', (e)=>{
     playerSelection = e.target.id;
     computerSelection = computerPlay();
     decision = playRound(playerSelection, computerSelection);
-    resultsDisplay.textContent = decision;
+
+    switch(decision) {
+        case "Win":
+            wins++;
+            break;
+        case "Lose":
+            losses++;
+            break;
+    };
+
+    resultsDisplay.textContent = createMessage(playerSelection,
+        computerSelection,
+        decision
+    );
+    if((wins + losses) >= 5) {
+        if(wins > losses) {
+            winnerDisplay.textContent = 'You won the game!';
+        } else {
+            winnerDisplay.textContent = 'You loss the game!';
+        }
+        disableButtons();
+    }
+    tallyDisplay.textContent = `Score: ${wins} - ${losses}`
 }));
