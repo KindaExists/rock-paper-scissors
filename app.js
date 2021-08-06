@@ -97,10 +97,11 @@ function tallyWinsLosses(wins, losses){
     return message;
 }
 
+const resultsDisplay = document.querySelector('#display')
 const btns = document.querySelectorAll('.selection');
 btns.forEach(btn => btn.addEventListener('click', (e)=>{
     playerSelection = e.target.id;
     computerSelection = computerPlay();
     decision = playRound(playerSelection, computerSelection);
-    console.log(decision)
+    resultsDisplay.textContent = decision;
 }));
