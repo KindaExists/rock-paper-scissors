@@ -145,7 +145,7 @@ btns.forEach(btn => btn.addEventListener('click', (e)=>{
         if(wins > losses) {
             winnerDisplay.textContent = 'You won the game!';
         } else {
-            winnerDisplay.textContent = 'You loss the game!';
+            winnerDisplay.textContent = 'You lost the game!';
         }
         disableButtons();
     }
